@@ -40,7 +40,7 @@ Enter your domain and click **Add Site** to enable CloudProxy. You can add it wi
 
 You will see a pop-up that asks you to verify the domain name and server location. Pantheon sites are served from North America, but you can select a location that represents where you live.
 
-Indicate whether you are currently under a DDoS attack or if you would like to restrict your site's backend. When you are ready, click **Proceed**
+Indicate whether you are currently under a DDoS attack or if you would like to restrict your site's backend to whitelisted IPs. When you are ready, click **Proceed**
 
 ![Sucuri Add New Domain](/source/docs/assets/images/sucuri-add-new-domain.png)
 
