@@ -5,13 +5,59 @@ category:
   - developing
 authors:
   - atjuch
-date: 7/28/2015
+date: 8/7/2015
 ---
 With malicious attacks gaining popularity across the internet, it is becoming increasingly important to secure your site. The intent of these attacks vary, ranging from service interruption to malware injections, and more. In this guide, we will set up a Cloud Proxy service to protect your website and stay ahead of potential attacks.
+
 ## Why Sucuri?
 
-[Sucuri](https://sucuri.net) is one of the leading website security companies in the world. They offer a variety of paid and online tools ranging from [Website AntiVirus](https://sucuri.net/website-antivirus/), [Cloud Proxy (Firewall)](https://sucuri.net/website-firewall/), [Free Website Security Scan](https://sitecheck.sucuri.net/), and more.
-Whether you're looking to secure a personal site or an enterprise client, Sucuri has you covered with 24/7 ticket support and incredible response times.
+[Sucuri](https://sucuri.net) offers a variety of online tools ranging from Website AntiVirus, Cloud Proxy (Firewall), Free Website Security Scan, and more.
+
+### How Sucuri Protects Against DDoS / DoS Attacks
+
+They protect these attacks by implementing a multi-layer filtering system that comes from several Internet Service Providers (ISP) to provide additional bandwidth when the attack happens.
+
+The goal is to saturate or flood the network to the point of failure. With the added bandwidth from companies such as (Amazon AWS, Google CE and OVH), it allows Sucuri to sustain and divert the volumetric attacks. They also do not not have to manage their own infrastructure, the ability to scale and respond on-demand delivers faster resolution.
+
+### Block any type of attack
+
+Since all of the web requests are proxied, the network layer DDoS attackers never actually hit the client's server. This creates the ability to mitigate all network level attacks.
+
+<table class="table">
+	<tbody>
+			<tr>
+        <th align="left" style="width: 130px">TCP SYN+ACK</th>
+        <th align="left" style="width: 130px">Slowloris</th>
+        <th align="left" style="width: 130px">DNS Flood</th>
+        <th align="left" style="width: 130px">TCP FIN</th>
+        <th align="left" style="width: 130px">Spoofing</th>
+			</tr>
+			<tr>
+			</tr>
+			<tr>
+        <th align="left" style="width: 130px">NXDomain</th>
+        <th align="left" style="width: 130px">TCP RESET</th>
+        <th align="left" style="width: 130px">ICMP</th>
+        <th align="left" style="width: 130px">Mixed SYB</th>
+        <th align="left" style="width: 130px">TCP ACK</th>
+			</tr>
+      <tr>
+        <th align="left" style="width: 130px">IGMP</th>
+        <th align="left" style="width: 130px">Ping of Death</th>
+        <th align="left" style="width: 130px">TCP ACK + PSH</th>
+        <th align="left" style="width: 130px">HTTP Flood</th>
+        <th align="left" style="width: 130px">Smurf</th>
+			</tr>
+      <tr>
+        <th align="left" style="width: 130px">TCP Fragment</th>
+        <th align="left" style="width: 130px">Brute Force</th>
+        <th align="left" style="width: 130px">Reflected ICMP & UDP</th>
+        <th align="left" style="width: 130px">UDP</th>
+        <th align="left" style="width: 130px">Connection Flood</th>
+      </tr>
+			</tr>
+	</tbody>
+</table>
 
 ## Prerequisites
 
@@ -48,24 +94,50 @@ CloudProxy will display a status bar which will configure the account settings f
 
 ![Sucuri CloudProxy Loading](/source/docs/assets/images/sucuri-cloud-proxy-loading.png)
 
-## Activating CloudProxy
+## Activating CloudProxy / Setting up your DNS
 
-When the status bar is done, you will see a long page of information. Follow the instructions within the blue area labeled **Activating CloudProxy**:
+You will want to copy the Firewall IP address which is located under the General Settings. This will be the record you will point to CloudProxy.
 
-1. First, check the URL provided and verify your site loads on the temporary address.
-2. Second, if you need SSL support click the link provided for further instructions.
-3. Login to where your DNS settings are for your domain name and remove the records you received from Pantheon. Add just an **A Record** to the IP address Sucuri lists. Save your DNS settings and come back to your Sucuri dashboard screen.
-4. The domain name is now propagating, let's move on.
+![Activating CloudProxy](/source/docs/assets/images/sucuri-cloudproxy-activating.png)
 
-![Sucuri CloudProxy Activation](/source/docs/assets/images/sucuri-cloud-proxy-activating.png)
+### Pointing to the correct records
 
-## Adding the Pantheon CNAME to Sucuri
+Login to your domain registrar or DNS service, wherever your DNS records are managed. You will want to create **2 A records**.
+
+<table class="table">
+	<tbody>
+			<tr>
+        <th align="left" style="width: 130px">Host</th>
+        <th align="left" style="width: 130px">Points To</th>
+        <th align="left" style="width: 130px">TTL</th>
+			</tr>
+			<tr>
+			</tr>
+			<tr>
+        <td align="left">@ or domain.com</td>
+        <td align="left">192.237.224.60</td>
+        <td align="left">600s or default</td>
+			</tr>
+      <tr>
+        <td align="left">www</td>
+        <td align="left">CloudProxy IP</td>
+        <td align="left">600s or default</td>
+			</tr>
+			</tr>
+	</tbody>
+</table>
+
+Here is an example:
+
+![DNS A records](/source/docs/assets/images/sucuri-dns-a-records.png)
+
+### Adding the Pantheon CNAME to Sucuri
 
 Earlier on in the guide we removed the CNAME from the DNS records. Now, we are going to add it back to tell Sucuri where to route the "www" website traffic. After you have activated the CloudProxy you will see an area labeled **HOSTING IP ADDRESSES**, that is where you want to be.
 
 In the IP field copy and paste the CNAME provided for your from the [Pantheon site dashboard](/source/docs/articles/sites/domains/dns-records-for-directing-your-domain-to-your-pantheon-site/#pantheon-dns-records-for-http-sites)
 
-![Sucuri CloudProxy CNAME](/source/docs/assets/images/sucuri-cloud-proxy-cname.png)
+![Sucuri CloudProxy CNAME](/source/docs/assets/images/sucuri-cloud-proxy-cname-entry.png)
 
 ## Waiting for the site to propagate
 
